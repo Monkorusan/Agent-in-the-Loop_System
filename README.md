@@ -5,9 +5,9 @@ This repository is based on the paper, titled "On Feedback Design for Systems Wi
 DOI: [10.1109/LCSYS.2025.3586635](https://doi.org/10.1109/LCSYS.2025.3586635)
 ## Content
 ### AITL
-- The mathematic description is exactly the same with the paper above
-
-for old version where robust control toolbox based mincx and feasp is used, see the folder /deprecated
+- The mathematical description is identical to that in the paper above.
+- For the older version of `design_lmi_controller.m` utilizing MATLAB's Robust Control Toolbox solvers (e.g., `mincx`, `feasp`, `setlmi` etc...), please refer to the `deprecated` folder.
+- TODO: insert gif here of aitl animation.
 
 ## Requirements
 
