@@ -24,7 +24,7 @@ MOSEK is a commercial convex optimization solver. It is highly recommended for s
 2.  **License:** Place the `mosek.lic` file in a folder named `mosek` inside your user home directory:
     * Linux: `/home/username/mosek/mosek.lic`
     * Windows: `C:\Users\Username\mosek\mosek.lic`
-3.  **MATLAB Path:** Add the toolbox path in MATLAB so YALMIP can find the solver. Run the following in the MATLAB Command Window (Ubuntu):
+3.  **MATLAB Path:** Add the toolbox path in MATLAB so YALMIP can find the solver. Run the following in the MATLAB Command Window (Warning: r2019b below is the exact version in MOSEK package, which still works fine with r2025b and others):
 
     ```matlab
     % Adjust path version (e.g., 11.1) and internal folder (e.g., r2019b) as needed
