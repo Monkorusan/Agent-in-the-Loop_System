@@ -67,8 +67,11 @@ config.simulation.x0 = x0;
 config.visualization = struct();
 config.visualization.showPlots = true;                 % Enable plots
 config.visualization.showAnimation = true;             % Enable animation
-config.visualization.saveAnimation = false;             % Save video file
-config.visualization.videoFilename = 'simulation.mp4'; % Default filename
+config.visualization.saveAnimation = false;            % Save video file
+config.visualization.videoFilename = 'simulation.mp4'; % Default video filename
+config.visualization.saveGif = true;                  % Save GIF file
+config.visualization.gifFilename = 'simulation.gif';   % Default GIF filename
+config.visualization.gifDelay = [];                    % GIF frame delay (seconds), [] = auto
 config.visualization.figPos = [100, 100, 900, 600];    % [x, y, width, height]
 config.visualization.axisFontSize = 15;                % Font size for axes
 config.visualization.legendLocation = 'best';          % Legend position

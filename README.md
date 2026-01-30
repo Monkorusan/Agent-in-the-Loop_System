@@ -9,6 +9,16 @@ DOI: [10.1109/LCSYS.2025.3586635](https://doi.org/10.1109/LCSYS.2025.3586635)
 - For the older version of `design_lmi_controller.m` utilizing MATLAB's Robust Control Toolbox solvers (e.g., `mincx`, `feasp`, `setlmi` etc...), please refer to the `deprecated` folder.
 - TODO: insert gif here of aitl animation.
 
+#### Animation Export
+Set the following flags in `setup_config_param.m` to save video or GIF outputs:
+
+```matlab
+config.visualization.saveAnimation = true;   % Saves .mp4/.avi
+config.visualization.videoFilename = 'AITL_LMI.mp4';
+config.visualization.saveGif = true;         % Saves .gif
+config.visualization.gifFilename = 'AITL_LMI.gif';
+```
+
 ## Requirements
 
 ### MOSEK Solver

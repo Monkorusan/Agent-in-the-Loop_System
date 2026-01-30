@@ -8,12 +8,19 @@ function animate_aitl(simdata, ctrl, config)
 %             .visualization.showAnimation    - Enable animation (boolean)
 %             .visualization.saveAnimation    - Save video (boolean)
 %             .visualization.videoFilename    - Video filename
+%             .visualization.saveGif          - Save GIF (boolean)
+%             .visualization.gifFilename      - GIF filename
+%             .visualization.gifDelay         - GIF frame delay (seconds), [] = auto
 %             .visualization.figPos           - Figure position [x, y, w, h]
 %             .visualization.axisFontSize     - Axis font size
 %             .walk                           - Agent walk sequence
 
-if ~config.visualization.showAnimation
-    fprintf('Animation disabled (showAnimation = false)\n');
+showAnimation = config.visualization.showAnimation;
+saveVideo = config.visualization.saveAnimation;
+saveGif = config.visualization.saveGif;
+
+if ~showAnimation && ~saveVideo && ~saveGif
+    fprintf('Animation disabled (showAnimation/saveAnimation/saveGif = false)\n');
     return;
 end
 
@@ -32,8 +39,9 @@ walk = config.walk;
 
 figPos = config.visualization.figPos;
 axisFontSize = config.visualization.axisFontSize;
-saveVideo = config.visualization.saveAnimation;
 videoFilename = config.visualization.videoFilename;
+gifFilename = config.visualization.gifFilename;
+gifDelay = config.visualization.gifDelay;
 
 fprintf('\n=== Creating Animation ===\n');
 
@@ -50,7 +58,11 @@ spring_amplitude = 0.03;
 l = config.l; 
 
 %% Create figure
-figAnim = figure('Position', figPos, 'Color', 'w');
+if showAnimation
+    figAnim = figure('Position', figPos, 'Color', 'w');
+else
+    figAnim = figure('Position', figPos, 'Color', 'w', 'Visible', 'off');
+end
 figure(figAnim);  % Bring to front
 
 % Determine plot range
@@ -96,6 +108,21 @@ if saveVideo
     end
 else
     v = [];
+end
+
+if saveGif
+    [~, name, ext] = fileparts(gifFilename);
+    if isempty(ext) || ~strcmpi(ext, '.gif')
+        gifFilename = [name '.gif'];
+    end
+    if isempty(gifDelay) || gifDelay <= 0
+        gifDelay = dt * skip_frames / animate_speed;
+    end
+    gifDelay = max(0.01, gifDelay);
+    fprintf('Recording GIF to: %s\n', gifFilename);
+    firstGifFrame = true;
+else
+    firstGifFrame = false;
 end
 
 %% Animation loop
@@ -208,14 +235,25 @@ for frame_idx = 1:length(frames_to_plot)
     
     drawnow;
     
-    % Save frame to video
-    if ~isempty(v)
+    % Save frame to video/GIF
+    if ~isempty(v) || saveGif
         frame = getframe(figAnim);
-        writeVideo(v, frame);
+        if ~isempty(v)
+            writeVideo(v, frame);
+        end
+        if saveGif
+            [img, cmap] = rgb2ind(frame2im(frame), 256);
+            if firstGifFrame
+                imwrite(img, cmap, gifFilename, 'gif', 'LoopCount', inf, 'DelayTime', gifDelay);
+                firstGifFrame = false;
+            else
+                imwrite(img, cmap, gifFilename, 'gif', 'WriteMode', 'append', 'DelayTime', gifDelay);
+            end
+        end
     end
     
     % Pause for animation speed
-    if frame_idx < length(frames_to_plot)
+    if showAnimation && frame_idx < length(frames_to_plot)
         pause(dt * skip_frames / animate_speed);
     end
 end
@@ -224,6 +262,9 @@ end
 if ~isempty(v)
     close(v);
     fprintf('✓ Video saved: %s\n', videoFilename);
+end
+if saveGif
+    fprintf('✓ GIF saved: %s\n', gifFilename);
 end
 
 fprintf('✓ Animation complete\n');
